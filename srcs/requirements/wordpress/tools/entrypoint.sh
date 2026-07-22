@@ -8,7 +8,7 @@ cd $WP_PATH
 # Esperamos pacientemente a que MariaDB esté lista antes de hacer nada
 # 'mariadb' es el nombre del contenedor de la base de datos en docker-compose
 echo "Esperando a que MariaDB arranque..."
-while ! mysqladmin ping -h mariadb --silent; do
+while ! mysqladmin ping -h "$DB_HOST" --silent; do
     sleep 1
 done
 echo "MariaDB está lista. Iniciando configuración de WordPress..."
@@ -28,7 +28,7 @@ else
         --dbname=$DB_NAME \
         --dbuser=$DB_USER \
         --dbpass=$DB_PASSWORD \
-        --dbhost=mariadb \
+        --dbhost=$DB_HOST \
         --allow-root
 
     echo "Instalando WordPress..."
@@ -58,4 +58,4 @@ chown -R www-data:www-data $WP_PATH
 # 5. EL TRUCO DEL PID 1
 # Ejecutamos PHP-FPM en primer plano (-F) usando exec
 echo "Iniciando PHP-FPM..."
-exec /usr/sbin/php-fpm7.4 -F
+exec /usr/sbin/php-fpm8.2 -F

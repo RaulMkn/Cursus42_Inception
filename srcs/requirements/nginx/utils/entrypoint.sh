@@ -12,7 +12,7 @@ if [ ! -f "$CERTIFICATE" ] || [ ! -f "$PRIVATE_KEY" ]; then
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
         -keyout "$PRIVATE_KEY" \
         -out "$CERTIFICATE" \
-        -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=Inception/CN=rmakende.42.fr/UID=rmakende"
+        -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=Inception/CN=${DOMAIN_NAME}/UID=${WP_ADMIN}"
 
     chmod 600 "$PRIVATE_KEY"
     chmod 644 "$CERTIFICATE"
@@ -21,6 +21,8 @@ if [ ! -f "$CERTIFICATE" ] || [ ! -f "$PRIVATE_KEY" ]; then
 else
     echo "El certificado SSL ya existe. Omitiendo generación."
 fi
+
+envsubst '$DOMAIN_NAME' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 echo "Iniciando NGINX..."
 

@@ -1,5 +1,5 @@
 # 1. Cumplimos la regla de la penúltima versión estable
-FROM debian:bullseye
+FROM debian:bookworm
 
 # 2. Actualizamos e instalamos los paquetes necesarios (sin usar sudo)
 # - php-fpm: El motor de PHP
@@ -7,8 +7,8 @@ FROM debian:bullseye
 # - mariadb-client: Para poder hacer el "ping" de comprobación en el script
 # - curl: Para descargar wp-cli
 RUN apt-get update && apt-get install -y \
-    php7.4-fpm \
-    php7.4-mysql \
+    php8.2-fpm \
+    php8.2-mysql \
     mariadb-client \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -22,8 +22,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 RUN mkdir -p /run/php
 
 # 5. Copiamos los archivos de configuración y scripts
-# OJO a la ruta de destino de www.conf, es específica de Debian y PHP 7.4
-COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+# OJO a la ruta de destino de www.conf, es específica de Debian y PHP 8.2
+COPY ./conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 COPY ./tools/entrypoint.sh /usr/local/bin/
 
 # 6. Damos permisos al script
