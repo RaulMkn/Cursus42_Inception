@@ -14,12 +14,23 @@ services:
     networks:
       - inception_network
 
+  redis:
+    build:
+      context: ./srcs/requirements/redis
+    container_name: redis
+    volumes:
+      - ${HOME}/data/redis:/data
+    restart: always
+    networks:
+      - inception_network
+
   wordpress:
     build:
       context: ./srcs/requirements/wordpress
     container_name: wordpress
     depends_on:
       - db
+      - redis
     volumes:
       - ${HOME}/data/wordpress:/var/www/html
     environment:
@@ -27,11 +38,48 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: ${DB_HOST}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
       DOMAIN_NAME: ${DOMAIN_NAME}
       WP_ADMIN: ${WP_ADMIN}
       WP_ADMIN_PASS: ${WP_ADMIN_PASS}
       WP_USER: ${WP_USER}
       WP_USER_PASS: ${WP_USER_PASS}
+    restart: always
+    networks:
+      - inception_network
+
+  ftp:
+    build:
+      context: ./srcs/requirements/ftp
+    container_name: ftp
+    depends_on:
+      - wordpress
+    volumes:
+      - ${HOME}/data/wordpress:/var/www/html
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      FTP_USER: ${FTP_USER}
+      FTP_PASSWORD: ${FTP_PASSWORD}
+      FTP_PASV_ADDRESS: ${FTP_PASV_ADDRESS}
+    restart: always
+    networks:
+      - inception_network
+
+  adminer:
+    build:
+      context: ./srcs/requirements/adminer
+    container_name: adminer
+    depends_on:
+      - db
+    volumes:
+      - ${HOME}/data/adminer:/var/www/html
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: ${ADMINER_DEFAULT_SERVER}
     restart: always
     networks:
       - inception_network

@@ -52,8 +52,21 @@ else
     echo "WordPress instalado correctamente."
 fi
 
+wp config set WP_REDIS_HOST "$REDIS_HOST" --type=constant --raw --allow-root --path="$WP_PATH"
+wp config set WP_REDIS_PORT "$REDIS_PORT" --type=constant --raw --allow-root --path="$WP_PATH"
+wp config set WP_CACHE true --type=constant --raw --allow-root --path="$WP_PATH"
+
+if ! wp plugin is-installed redis-cache --allow-root --path="$WP_PATH"; then
+    echo "Instalando el plugin de Redis para WordPress..."
+    wp plugin install redis-cache --activate --allow-root --path="$WP_PATH"
+fi
+
+wp redis enable --allow-root --path="$WP_PATH" || true
+
 # 4. Aseguramos los permisos de los archivos para que NGINX pueda leerlos
 chown -R www-data:www-data $WP_PATH
+find "$WP_PATH" -type d -exec chmod 775 {} \;
+find "$WP_PATH" -type f -exec chmod 664 {} \;
 
 # 5. EL TRUCO DEL PID 1
 # Ejecutamos PHP-FPM en primer plano (-F) usando exec

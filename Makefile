@@ -10,6 +10,8 @@ build:
 	@echo "Creando directorios para volúmenes host..."
 	@mkdir -p $(DATA_PATH)/mariadb
 	@mkdir -p $(DATA_PATH)/wordpress
+	@mkdir -p $(DATA_PATH)/redis
+	@mkdir -p $(DATA_PATH)/adminer
 	@echo "Construyendo y levantando la infraestructura..."
 	@docker compose -f $(COMPOSE_FILE) up -d --build
 
@@ -30,6 +32,8 @@ fclean: clean
 	@echo "Borrando datos físicos del host..."
 	@sudo rm -rf $(DATA_PATH)/mariadb/*
 	@sudo rm -rf $(DATA_PATH)/wordpress/*
+	@sudo rm -rf $(DATA_PATH)/redis/*
+	@sudo rm -rf $(DATA_PATH)/adminer/*
 
 # 5. Reinicio completo
 re: fclean all
