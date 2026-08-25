@@ -1,12 +1,14 @@
 services:
   nginx:
     build:
-      context: ./srcs/requirements/nginx
+      context: ./requirements/nginx
     container_name: nginx
+    depends_on:
+      - wordpress
     ports:
       - "443:443"
     volumes:
-      - ${HOME}/data/wordpress:/var/www/html
+      - wordpress:/var/www/html
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
       WP_ADMIN: ${WP_ADMIN}
@@ -16,23 +18,21 @@ services:
 
   redis:
     build:
-      context: ./srcs/requirements/redis
+      context: ./requirements/redis
     container_name: redis
-    volumes:
-      - ${HOME}/data/redis:/data
     restart: always
     networks:
       - inception_network
 
   wordpress:
     build:
-      context: ./srcs/requirements/wordpress
+      context: ./requirements/wordpress
     container_name: wordpress
     depends_on:
       - db
       - redis
     volumes:
-      - ${HOME}/data/wordpress:/var/www/html
+      - wordpress:/var/www/html
     environment:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
@@ -51,12 +51,12 @@ services:
 
   ftp:
     build:
-      context: ./srcs/requirements/ftp
+      context: ./requirements/ftp
     container_name: ftp
     depends_on:
       - wordpress
     volumes:
-      - ${HOME}/data/wordpress:/var/www/html
+      - wordpress:/var/www/html
     ports:
       - "21:21"
       - "30000-30009:30000-30009"
@@ -70,12 +70,10 @@ services:
 
   adminer:
     build:
-      context: ./srcs/requirements/adminer
+      context: ./requirements/adminer
     container_name: adminer
     depends_on:
       - db
-    volumes:
-      - ${HOME}/data/adminer:/var/www/html
     ports:
       - "8080:8080"
     environment:
@@ -86,10 +84,10 @@ services:
 
   db:
     build:
-      context: ./srcs/requirements/mariadb
+      context: ./requirements/mariadb
     container_name: mariadb
     volumes:
-      - ${HOME}/data/mariadb:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     restart: always
     environment:
       MYSQL_DATABASE: ${DB_NAME}
@@ -100,6 +98,45 @@ services:
     networks:
       - inception_network
 
+  static-site:
+    build:
+      context: ./requirements/static-site
+    container_name: static-site
+    ports:
+      - "8443:8443"
+    restart: always
+    networks:
+      - inception_network
+
+  cadvisor:
+    build:
+      context: ./requirements/cadvisor
+    container_name: cadvisor
+    ports:
+      - "8181:8181"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    networks:
+      - inception_network
+
 networks:
   inception_network:
     driver: bridge
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/rmakende/data/wordpress
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/rmakende/data/mariadb

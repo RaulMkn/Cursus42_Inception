@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rmakende | 42 Developer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <header>
+        <nav>
+            <div class="logo">rm<span class="accent">.</span></div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#infrastructure">Infra</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <p class="hero-tag">Hello, I'm</p>
+                <h1>rmakende</h1>
+                <p class="hero-subtitle">Systems &amp; Software Developer at <span class="accent">42</span></p>
+                <p class="hero-description">Building robust infrastructure, one container at a time.</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="terminal-title">bash</span>
+                    </div>
+                    <div class="terminal-body">
+                        <p><span class="prompt">$</span> docker compose up -d</p>
+                        <p class="output">[+] Running 8/8</p>
+                        <p class="output success">&#10003; Container nginx        Started</p>
+                        <p class="output success">&#10003; Container wordpress    Started</p>
+                        <p class="output success">&#10003; Container mariadb      Started</p>
+                        <p class="output success">&#10003; Container redis        Started</p>
+                        <p class="output success">&#10003; Container ftp          Started</p>
+                        <p class="output success">&#10003; Container adminer      Started</p>
+                        <p class="output success">&#10003; Container static-site  Started</p>
+                        <p class="output success">&#10003; Container cadvisor     Started</p>
+                        <p><span class="prompt">$</span> <span class="cursor">_</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2><span class="section-number">01.</span> About Me</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>I'm a student at 42, focused on systems programming, DevOps, and building things that actually work under pressure.</p>
+                    <p>I enjoy understanding how things work at a low level &mdash; from how the kernel manages processes to how containers isolate workloads. This project (Inception) is a reflection of that: infrastructure built from scratch, no shortcuts.</p>
+                    <p>When I'm not debugging Dockerfiles, I'm probably reading about networking, writing C, or breaking things to learn how to fix them.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-number">42</span>
+                        <span class="stat-label">School</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Containers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">0</span>
+                        <span class="stat-label">Pre-made images</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2><span class="section-number">02.</span> Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <ul>
+                        <li>C</li>
+                        <li>C++</li>
+                        <li>Bash / Shell</li>
+                        <li>Python</li>
+                        <li>HTML / CSS</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Infrastructure</h3>
+                    <ul>
+                        <li>Docker &amp; Compose</li>
+                        <li>NGINX</li>
+                        <li>MariaDB / MySQL</li>
+                        <li>Redis</li>
+                        <li>Linux sysadmin</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools</h3>
+                    <ul>
+                        <li>Git</li>
+                        <li>Make</li>
+                        <li>Vim / VS Code</li>
+                        <li>Valgrind</li>
+                        <li>GDB</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Concepts</h3>
+                    <ul>
+                        <li>Networking (TCP/IP)</li>
+                        <li>Process management</li>
+                        <li>TLS / SSL</li>
+                        <li>Containerization</li>
+                        <li>CI/CD pipelines</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2><span class="section-number">03.</span> Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card featured">
+                    <div class="project-label">Featured</div>
+                    <h3>Inception</h3>
+                    <p>Complete Docker infrastructure with 8 custom-built containers: NGINX + TLS, WordPress, MariaDB, Redis, FTP, Adminer, static site, and cAdvisor. All from debian:bookworm, zero pre-made images.</p>
+                    <div class="project-tags">
+                        <span>Docker</span>
+                        <span>Compose</span>
+                        <span>NGINX</span>
+                        <span>WordPress</span>
+                        <span>MariaDB</span>
+                        <span>Redis</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Libft</h3>
+                    <p>Custom implementation of the C standard library. Foundation for all subsequent C projects at 42.</p>
+                    <div class="project-tags">
+                        <span>C</span>
+                        <span>Memory</span>
+                        <span>Strings</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>ft_printf</h3>
+                    <p>Recreation of printf with variadic arguments, handling multiple format specifiers and flags.</p>
+                    <div class="project-tags">
+                        <span>C</span>
+                        <span>Variadic</span>
+                        <span>Parsing</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Philosophers</h3>
+                    <p>Dining philosophers problem solved with threads and mutexes. Concurrency without deadlocks.</p>
+                    <div class="project-tags">
+                        <span>C</span>
+                        <span>Threads</span>
+                        <span>Mutexes</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Minishell</h3>
+                    <p>A functional shell with pipes, redirections, environment variables, and signal handling.</p>
+                    <div class="project-tags">
+                        <span>C</span>
+                        <span>Processes</span>
+                        <span>Signals</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>More coming...</h3>
+                    <p>Always building. Check back for updates on new projects from the 42 curriculum and beyond.</p>
+                    <div class="project-tags">
+                        <span>TBD</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="infrastructure">
+            <h2><span class="section-number">04.</span> Infrastructure</h2>
+            <p class="section-intro">This very page is served by the Inception infrastructure. Here's what's running:</p>
+            <div class="infra-diagram">
+                <div class="infra-row">
+                    <div class="infra-node entry">
+                        <div class="node-icon">443</div>
+                        <div class="node-name">NGINX</div>
+                        <div class="node-desc">TLS termination</div>
+                    </div>
+                </div>
+                <div class="infra-connector"></div>
+                <div class="infra-row core">
+                    <div class="infra-node">
+                        <div class="node-icon">9000</div>
+                        <div class="node-name">WordPress</div>
+                        <div class="node-desc">PHP-FPM</div>
+                    </div>
+                    <div class="infra-node">
+                        <div class="node-icon">3306</div>
+                        <div class="node-name">MariaDB</div>
+                        <div class="node-desc">Database</div>
+                    </div>
+                    <div class="infra-node">
+                        <div class="node-icon">6379</div>
+                        <div class="node-name">Redis</div>
+                        <div class="node-desc">Cache</div>
+                    </div>
+                </div>
+                <div class="infra-connector"></div>
+                <div class="infra-row bonus">
+                    <div class="infra-node">
+                        <div class="node-icon">21</div>
+                        <div class="node-name">FTP</div>
+                        <div class="node-desc">File access</div>
+                    </div>
+                    <div class="infra-node">
+                        <div class="node-icon">8080</div>
+                        <div class="node-name">Adminer</div>
+                        <div class="node-desc">DB manager</div>
+                    </div>
+                    <div class="infra-node current">
+                        <div class="node-icon">8443</div>
+                        <div class="node-name">Static</div>
+                        <div class="node-desc">This page</div>
+                    </div>
+                    <div class="infra-node">
+                        <div class="node-icon">8181</div>
+                        <div class="node-name">cAdvisor</div>
+                        <div class="node-desc">Monitoring</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2><span class="section-number">05.</span> Contact</h2>
+            <div class="contact-content">
+                <p>Interested in working together or have a question? Reach out.</p>
+                <div class="contact-links">
+                    <a href="https://profile.intra.42.fr/users/rmakende" class="contact-link">
+                        <span class="contact-icon">42</span>
+                        <span>Intra Profile</span>
+                    </a>
+                    <a href="mailto:rmakende@student.42.fr" class="contact-link">
+                        <span class="contact-icon">@</span>
+                        <span>rmakende@student.42.fr</span>
+                    </a>
+                    <a href="https://github.com/rmakende" class="contact-link">
+                        <span class="contact-icon">GH</span>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built from scratch with HTML &amp; CSS &mdash; no frameworks, no PHP.</p>
+        <p class="footer-sub">Served by NGINX inside a Docker container based on debian:bookworm</p>
+    </footer>
+</body>
+</html>

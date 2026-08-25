@@ -1,2 +1,4 @@
-*pdf
+*.pdf
 *.env
+secrets/
+TODO.md
