@@ -6,7 +6,7 @@
 
 Inception is a system administration project that uses Docker to virtualize a complete web infrastructure inside a virtual machine. The goal is to build, configure, and orchestrate multiple services using custom Docker images, Docker Compose, and Docker networks — without relying on pre-made images from DockerHub.
 
-The infrastructure deploys a functional WordPress website backed by MariaDB, served through NGINX with TLS encryption, and enhanced with bonus services including Redis caching, FTP access, a static portfolio site, Adminer for database management, and cAdvisor for container monitoring.
+The infrastructure deploys a functional WordPress website backed by MariaDB, served through NGINX with TLS encryption, and enhanced with bonus services including Redis caching, FTP access, a real-time monitoring dashboard, Adminer for database management, and cAdvisor for container metrics collection.
 
 All containers are built from Debian Bookworm, use custom Dockerfiles, and communicate through a dedicated Docker network. Data persistence is handled through Docker named volumes stored on the host filesystem.
 
@@ -16,6 +16,7 @@ All containers are built from Debian Bookworm, use custom Dockerfiles, and commu
 - **PID 1 best practices**: all entrypoints use `exec` to replace the shell process with the actual service daemon, ensuring proper signal handling.
 - **Wait-for-it pattern**: WordPress entrypoint waits for MariaDB to be ready before proceeding with installation, handling startup ordering beyond `depends_on`.
 - **Environment variables and secrets**: credentials are stored in `.env` (gitignored) and a `secrets/` directory, never hardcoded in Dockerfiles.
+- **Monitoring Dashboard**: the static site bonus is a real-time infrastructure dashboard (HTML/CSS/JS, no PHP) that consumes cAdvisor's REST API to display SLO metrics, container health, CPU/memory graphs, and network I/O. NGINX proxies API requests internally to avoid CORS issues.
 
 ### Virtual Machines vs Docker
 
@@ -87,8 +88,8 @@ make re     # Full rebuild from scratch
 |---------|-------------|
 | WordPress | https://rmakende.42.fr |
 | Adminer | http://rmakende.42.fr:8080 |
-| Static Site | http://rmakende.42.fr:8443 |
-| cAdvisor | http://rmakende.42.fr:8181 |
+| Monitoring Dashboard | http://rmakende.42.fr:8443 |
+| cAdvisor API | http://rmakende.42.fr:8181 |
 | FTP | ftp://rmakende.42.fr:21 |
 
 ## Resources

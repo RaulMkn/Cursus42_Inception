@@ -3,274 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rmakende | 42 Developer</title>
+    <title>Inception Monitor | Infrastructure Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <div class="noise"></div>
     <header>
-        <nav>
-            <div class="logo">rm<span class="accent">.</span></div>
-            <div class="nav-links">
-                <a href="#about">About</a>
-                <a href="#skills">Skills</a>
-                <a href="#projects">Projects</a>
-                <a href="#infrastructure">Infra</a>
-                <a href="#contact">Contact</a>
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">&#9678;</span>
+                <h1>Inception Monitor</h1>
             </div>
-        </nav>
+            <div class="header-meta">
+                <span class="status-badge online">System Online</span>
+                <span class="last-update" id="lastUpdate">--</span>
+            </div>
+        </div>
     </header>
 
     <main>
-        <section id="hero">
-            <div class="hero-content">
-                <p class="hero-tag">Hello, I'm</p>
-                <h1>rmakende</h1>
-                <p class="hero-subtitle">Systems &amp; Software Developer at <span class="accent">42</span></p>
-                <p class="hero-description">Building robust infrastructure, one container at a time.</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn btn-primary">View Projects</a>
-                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+        <!-- SLO Summary Cards -->
+        <section class="slo-section">
+            <h2>Service Level Objectives</h2>
+            <div class="slo-grid">
+                <div class="slo-card">
+                    <div class="slo-header">
+                        <span class="slo-label">Availability</span>
+                        <span class="slo-target">Target: 99.9%</span>
+                    </div>
+                    <div class="slo-value" id="sloAvailability">--</div>
+                    <div class="slo-bar">
+                        <div class="slo-bar-fill" id="sloAvailabilityBar"></div>
+                    </div>
+                    <span class="slo-status" id="sloAvailabilityStatus">Loading...</span>
                 </div>
-            </div>
-            <div class="hero-visual">
-                <div class="terminal">
-                    <div class="terminal-header">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                        <span class="terminal-title">bash</span>
+                <div class="slo-card">
+                    <div class="slo-header">
+                        <span class="slo-label">CPU Budget</span>
+                        <span class="slo-target">Target: &lt;80%</span>
                     </div>
-                    <div class="terminal-body">
-                        <p><span class="prompt">$</span> docker compose up -d</p>
-                        <p class="output">[+] Running 8/8</p>
-                        <p class="output success">&#10003; Container nginx        Started</p>
-                        <p class="output success">&#10003; Container wordpress    Started</p>
-                        <p class="output success">&#10003; Container mariadb      Started</p>
-                        <p class="output success">&#10003; Container redis        Started</p>
-                        <p class="output success">&#10003; Container ftp          Started</p>
-                        <p class="output success">&#10003; Container adminer      Started</p>
-                        <p class="output success">&#10003; Container static-site  Started</p>
-                        <p class="output success">&#10003; Container cadvisor     Started</p>
-                        <p><span class="prompt">$</span> <span class="cursor">_</span></p>
+                    <div class="slo-value" id="sloCpu">--</div>
+                    <div class="slo-bar">
+                        <div class="slo-bar-fill" id="sloCpuBar"></div>
                     </div>
+                    <span class="slo-status" id="sloCpuStatus">Loading...</span>
                 </div>
-            </div>
-        </section>
-
-        <section id="about">
-            <h2><span class="section-number">01.</span> About Me</h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>I'm a student at 42, focused on systems programming, DevOps, and building things that actually work under pressure.</p>
-                    <p>I enjoy understanding how things work at a low level &mdash; from how the kernel manages processes to how containers isolate workloads. This project (Inception) is a reflection of that: infrastructure built from scratch, no shortcuts.</p>
-                    <p>When I'm not debugging Dockerfiles, I'm probably reading about networking, writing C, or breaking things to learn how to fix them.</p>
+                <div class="slo-card">
+                    <div class="slo-header">
+                        <span class="slo-label">Memory Budget</span>
+                        <span class="slo-target">Target: &lt;85%</span>
+                    </div>
+                    <div class="slo-value" id="sloMemory">--</div>
+                    <div class="slo-bar">
+                        <div class="slo-bar-fill" id="sloMemoryBar"></div>
+                    </div>
+                    <span class="slo-status" id="sloMemoryStatus">Loading...</span>
                 </div>
-                <div class="about-stats">
-                    <div class="stat">
-                        <span class="stat-number">42</span>
-                        <span class="stat-label">School</span>
+                <div class="slo-card">
+                    <div class="slo-header">
+                        <span class="slo-label">Containers Running</span>
+                        <span class="slo-target">Expected: 8</span>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">8</span>
-                        <span class="stat-label">Containers</span>
+                    <div class="slo-value" id="sloContainers">--</div>
+                    <div class="slo-bar">
+                        <div class="slo-bar-fill" id="sloContainersBar"></div>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">0</span>
-                        <span class="stat-label">Pre-made images</span>
-                    </div>
+                    <span class="slo-status" id="sloContainersStatus">Loading...</span>
                 </div>
             </div>
         </section>
 
-        <section id="skills">
-            <h2><span class="section-number">02.</span> Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Languages</h3>
-                    <ul>
-                        <li>C</li>
-                        <li>C++</li>
-                        <li>Bash / Shell</li>
-                        <li>Python</li>
-                        <li>HTML / CSS</li>
-                    </ul>
+        <!-- Container Status Grid -->
+        <section class="containers-section">
+            <h2>Container Status</h2>
+            <div class="container-grid" id="containerGrid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <h2>Resource Usage</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>CPU Usage per Container</h3>
+                    <canvas id="cpuChart"></canvas>
                 </div>
-                <div class="skill-category">
-                    <h3>Infrastructure</h3>
-                    <ul>
-                        <li>Docker &amp; Compose</li>
-                        <li>NGINX</li>
-                        <li>MariaDB / MySQL</li>
-                        <li>Redis</li>
-                        <li>Linux sysadmin</li>
-                    </ul>
+                <div class="chart-card">
+                    <h3>Memory Usage per Container</h3>
+                    <canvas id="memoryChart"></canvas>
                 </div>
-                <div class="skill-category">
-                    <h3>Tools</h3>
-                    <ul>
-                        <li>Git</li>
-                        <li>Make</li>
-                        <li>Vim / VS Code</li>
-                        <li>Valgrind</li>
-                        <li>GDB</li>
-                    </ul>
+                <div class="chart-card">
+                    <h3>Network I/O (bytes)</h3>
+                    <canvas id="networkChart"></canvas>
                 </div>
-                <div class="skill-category">
-                    <h3>Concepts</h3>
-                    <ul>
-                        <li>Networking (TCP/IP)</li>
-                        <li>Process management</li>
-                        <li>TLS / SSL</li>
-                        <li>Containerization</li>
-                        <li>CI/CD pipelines</li>
-                    </ul>
+                <div class="chart-card">
+                    <h3>Memory Distribution</h3>
+                    <canvas id="memoryPieChart"></canvas>
                 </div>
             </div>
         </section>
 
-        <section id="projects">
-            <h2><span class="section-number">03.</span> Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card featured">
-                    <div class="project-label">Featured</div>
-                    <h3>Inception</h3>
-                    <p>Complete Docker infrastructure with 8 custom-built containers: NGINX + TLS, WordPress, MariaDB, Redis, FTP, Adminer, static site, and cAdvisor. All from debian:bookworm, zero pre-made images.</p>
-                    <div class="project-tags">
-                        <span>Docker</span>
-                        <span>Compose</span>
-                        <span>NGINX</span>
-                        <span>WordPress</span>
-                        <span>MariaDB</span>
-                        <span>Redis</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>Libft</h3>
-                    <p>Custom implementation of the C standard library. Foundation for all subsequent C projects at 42.</p>
-                    <div class="project-tags">
-                        <span>C</span>
-                        <span>Memory</span>
-                        <span>Strings</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>ft_printf</h3>
-                    <p>Recreation of printf with variadic arguments, handling multiple format specifiers and flags.</p>
-                    <div class="project-tags">
-                        <span>C</span>
-                        <span>Variadic</span>
-                        <span>Parsing</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>Philosophers</h3>
-                    <p>Dining philosophers problem solved with threads and mutexes. Concurrency without deadlocks.</p>
-                    <div class="project-tags">
-                        <span>C</span>
-                        <span>Threads</span>
-                        <span>Mutexes</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>Minishell</h3>
-                    <p>A functional shell with pipes, redirections, environment variables, and signal handling.</p>
-                    <div class="project-tags">
-                        <span>C</span>
-                        <span>Processes</span>
-                        <span>Signals</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>More coming...</h3>
-                    <p>Always building. Check back for updates on new projects from the 42 curriculum and beyond.</p>
-                    <div class="project-tags">
-                        <span>TBD</span>
-                    </div>
-                </div>
+        <!-- Service Details Table -->
+        <section class="details-section">
+            <h2>Service Details</h2>
+            <div class="table-wrapper">
+                <table id="serviceTable">
+                    <thead>
+                        <tr>
+                            <th>Container</th>
+                            <th>Status</th>
+                            <th>CPU %</th>
+                            <th>Memory</th>
+                            <th>Network RX</th>
+                            <th>Network TX</th>
+                            <th>Uptime</th>
+                        </tr>
+                    </thead>
+                    <tbody id="serviceTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
         </section>
 
-        <section id="infrastructure">
-            <h2><span class="section-number">04.</span> Infrastructure</h2>
-            <p class="section-intro">This very page is served by the Inception infrastructure. Here's what's running:</p>
-            <div class="infra-diagram">
-                <div class="infra-row">
-                    <div class="infra-node entry">
-                        <div class="node-icon">443</div>
-                        <div class="node-name">NGINX</div>
-                        <div class="node-desc">TLS termination</div>
-                    </div>
-                </div>
-                <div class="infra-connector"></div>
-                <div class="infra-row core">
-                    <div class="infra-node">
-                        <div class="node-icon">9000</div>
-                        <div class="node-name">WordPress</div>
-                        <div class="node-desc">PHP-FPM</div>
-                    </div>
-                    <div class="infra-node">
-                        <div class="node-icon">3306</div>
-                        <div class="node-name">MariaDB</div>
-                        <div class="node-desc">Database</div>
-                    </div>
-                    <div class="infra-node">
-                        <div class="node-icon">6379</div>
-                        <div class="node-name">Redis</div>
-                        <div class="node-desc">Cache</div>
-                    </div>
-                </div>
-                <div class="infra-connector"></div>
-                <div class="infra-row bonus">
-                    <div class="infra-node">
-                        <div class="node-icon">21</div>
-                        <div class="node-name">FTP</div>
-                        <div class="node-desc">File access</div>
-                    </div>
-                    <div class="infra-node">
-                        <div class="node-icon">8080</div>
-                        <div class="node-name">Adminer</div>
-                        <div class="node-desc">DB manager</div>
-                    </div>
-                    <div class="infra-node current">
-                        <div class="node-icon">8443</div>
-                        <div class="node-name">Static</div>
-                        <div class="node-desc">This page</div>
-                    </div>
-                    <div class="infra-node">
-                        <div class="node-icon">8181</div>
-                        <div class="node-name">cAdvisor</div>
-                        <div class="node-desc">Monitoring</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2><span class="section-number">05.</span> Contact</h2>
-            <div class="contact-content">
-                <p>Interested in working together or have a question? Reach out.</p>
-                <div class="contact-links">
-                    <a href="https://profile.intra.42.fr/users/rmakende" class="contact-link">
-                        <span class="contact-icon">42</span>
-                        <span>Intra Profile</span>
-                    </a>
-                    <a href="mailto:rmakende@student.42.fr" class="contact-link">
-                        <span class="contact-icon">@</span>
-                        <span>rmakende@student.42.fr</span>
-                    </a>
-                    <a href="https://github.com/rmakende" class="contact-link">
-                        <span class="contact-icon">GH</span>
-                        <span>GitHub</span>
-                    </a>
-                </div>
+        <!-- Error/Fallback Message -->
+        <section class="error-section" id="errorSection" style="display: none;">
+            <div class="error-card">
+                <span class="error-icon">&#9888;</span>
+                <h3>Cannot reach cAdvisor API</h3>
+                <p>The dashboard fetches metrics from <code id="cadvisorUrl"></code></p>
+                <p>Make sure cAdvisor is running and accessible. The dashboard will retry automatically.</p>
+                <button onclick="fetchMetrics()">Retry Now</button>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>Built from scratch with HTML &amp; CSS &mdash; no frameworks, no PHP.</p>
-        <p class="footer-sub">Served by NGINX inside a Docker container based on debian:bookworm</p>
+        <p>Inception Infrastructure Dashboard &mdash; Static site (HTML/CSS/JS) consuming cAdvisor REST API</p>
+        <p class="footer-sub">No PHP, no backend. Served by NGINX on debian:bookworm | Auto-refresh every 5s</p>
     </footer>
+
+    <script>
+        // Configuration
+        // API calls go through our own NGINX proxy (/api/) to avoid CORS issues
+        // NGINX proxies /api/ -> cadvisor:8181/api/ internally via Docker network
+        const CADVISOR_BASE = `${window.location.origin}`;
+        const REFRESH_INTERVAL = 5000;
+        const EXPECTED_CONTAINERS = 8;
+        const SLO_AVAILABILITY_TARGET = 99.9;
+        const SLO_CPU_TARGET = 80;
+        const SLO_MEMORY_TARGET = 85;
+
+        // Known container names for our infrastructure
+        const KNOWN_CONTAINERS = ['nginx', 'wordpress', 'mariadb', 'redis', 'ftp', 'adminer', 'static-site', 'cadvisor'];
+
+        // Chart instances
+        let cpuChart, memoryChart, networkChart, memoryPieChart;
+        
+        // Historical data for charts (last 20 data points)
+        const MAX_HISTORY = 20;
+        let cpuHistory = {};
+        let memHistory = {};
+        let timeLabels = [];
+
+        // Chart color palette
+        const COLORS = [
+            '#6366f1', '#06b6d4', '#10b981', '#f59e0b',
+            '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'
+        ];
+
+        document.getElementById('cadvisorUrl', CADVISOR_BASE);
+
+        // Initialize charts
+        function initCharts() {
+            const chartDefaults = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#cbd5e1', font: { size: 11 } }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#64748b', maxTicksLimit: 8 },
+                        grid: { color: 'rgba(100,116,139,0.1)' }
+                    },
+                    y: {
+                        ticks: { color: '#64748b' },
+                        grid: { color: 'rgba(100,116,139,0.1)' }
+                    }
+                }
+            };
+
+            cpuChart = new Chart(document.getElementById('cpuChart'), {
+                type: 'line',
+                data: { labels: [], datasets: [] },
+                options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, title: { display: true, text: '%', color: '#94a3b8' } } } }
+            });
+
+            memoryChart = new Chart(document.getElementById('memoryChart'), {
+                type: 'line',
+                data: { labels: [], datasets: [] },
+                options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, title: { display: true, text: 'MB', color: '#94a3b8' } } } }
+            });
+
+            networkChart = new Chart(document.getElementById('networkChart'), {
+                type: 'bar',
+                data: { labels: [], datasets: [] },
+                options: {
+                    ...chartDefaults,
+                    scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, title: { display: true, text: 'KB', color: '#94a3b8' } } }
+                }
+            });
+
+            memoryPieChart = new Chart(document.getElementById('memoryPieChart'), {
+                type: 'doughnut',
+                data: { labels: [], datasets: [] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#cbd5e1', font: { size: 11 }, padding: 12 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch metrics from cAdvisor API
+        async function fetchMetrics() {
+            try {
+                const response = await fetch(`${CADVISOR_BASE}/api/v1.3/docker/`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                
+                document.getElementById('errorSection').style.display = 'none';
+                processMetrics(data);
+                updateLastRefresh();
+            } catch (error) {
+                console.error('Failed to fetch metrics:', error);
+                document.getElementById('errorSection').style.display = 'block';
+                document.getElementById('cadvisorUrl').textContent = `${CADVISOR_BASE}/api/v1.3/docker/`;
+                showFallbackData();
+            }
+        }
+
+        // Process metrics data from cAdvisor
+        function processMetrics(data) {
+            const containers = [];
+            
+            for (const [path, containerData] of Object.entries(data)) {
+                // cAdvisor returns container arrays, take the first (most recent) entry
+                const info = Array.isArray(containerData) ? containerData[0] : containerData;
+                if (!info || !info.name) continue;
+
+                const name = info.aliases ? info.aliases[0] : info.name;
+                if (!KNOWN_CONTAINERS.includes(name)) continue;
+
+                const stats = info.stats;
+                if (!stats || stats.length < 2) continue;
+
+                const latest = stats[stats.length - 1];
+                const previous = stats[stats.length - 2];
+
+                // Calculate CPU usage percentage
+                const cpuDelta = latest.cpu.usage.total - previous.cpu.usage.total;
+                const timeDelta = new Date(latest.timestamp) - new Date(previous.timestamp);
+                const numCores = latest.cpu.usage.per_cpu_usage ? latest.cpu.usage.per_cpu_usage.length : 1;
+                const cpuPercent = (cpuDelta / (timeDelta * 1e6 * numCores)) * 100;
+
+                // Memory usage
+                const memUsage = latest.memory.usage || 0;
+                const memLimit = info.spec.memory.limit || 0;
+                const memMB = memUsage / (1024 * 1024);
+                const memPercent = memLimit > 0 ? (memUsage / memLimit) * 100 : 0;
+
+                // Network
+                const netRx = latest.network ? latest.network.rx_bytes || 0 : 0;
+                const netTx = latest.network ? latest.network.tx_bytes || 0 : 0;
+
+                // Uptime
+                const created = new Date(info.spec.creation_time || latest.timestamp);
+                const uptime = Date.now() - created.getTime();
+
+                containers.push({
+                    name,
+                    cpuPercent: Math.max(0, cpuPercent),
+                    memMB,
+                    memPercent,
+                    memUsage,
+                    netRx,
+                    netTx,
+                    uptime,
+                    running: true
+                });
+            }
+
+            // Sort by name for consistency
+            containers.sort((a, b) => a.name.localeCompare(b.name));
+            
+            updateDashboard(containers);
+        }
+
+        // Show fallback/demo data when cAdvisor is unreachable
+        function showFallbackData() {
+            const demoContainers = KNOWN_CONTAINERS.map(name => ({
+                name,
+                cpuPercent: 0,
+                memMB: 0,
+                memPercent: 0,
+                memUsage: 0,
+                netRx: 0,
+                netTx: 0,
+                uptime: 0,
+                running: false
+            }));
+            updateDashboard(demoContainers);
+        }
+
+        // Update all dashboard elements
+        function updateDashboard(containers) {
+            updateSLOs(containers);
+            updateContainerGrid(containers);
+            updateCharts(containers);
+            updateTable(containers);
+        }
+
+        // Update SLO cards
+        function updateSLOs(containers) {
+            const runningCount = containers.filter(c => c.running).length;
+            const availability = runningCount > 0 ? (runningCount / EXPECTED_CONTAINERS) * 100 : 0;
+            const avgCpu = containers.length > 0 ? containers.reduce((s, c) => s + c.cpuPercent, 0) / containers.length : 0;
+            const avgMem = containers.length > 0 ? containers.reduce((s, c) => s + c.memPercent, 0) / containers.length : 0;
+
+            // Availability
+            setSLO('sloAvailability', `${availability.toFixed(1)}%`, availability, SLO_AVAILABILITY_TARGET, true);
+            
+            // CPU
+            setSLO('sloCpu', `${avgCpu.toFixed(1)}%`, avgCpu, SLO_CPU_TARGET, false);
+            
+            // Memory
+            setSLO('sloMemory', `${avgMem.toFixed(1)}%`, avgMem, SLO_MEMORY_TARGET, false);
+            
+            // Containers
+            const containerPercent = (runningCount / EXPECTED_CONTAINERS) * 100;
+            document.getElementById('sloContainers').textContent = `${runningCount}/${EXPECTED_CONTAINERS}`;
+            document.getElementById('sloContainersBar').style.width = `${containerPercent}%`;
+            const containersMet = runningCount === EXPECTED_CONTAINERS;
+            document.getElementById('sloContainersBar').className = `slo-bar-fill ${containersMet ? 'good' : 'bad'}`;
+            document.getElementById('sloContainersStatus').textContent = containersMet ? 'SLO Met' : 'SLO Breached';
+            document.getElementById('sloContainersStatus').className = `slo-status ${containersMet ? 'met' : 'breached'}`;
+        }
+
+        function setSLO(id, display, value, target, higherIsBetter) {
+            document.getElementById(id).textContent = display;
+            const barEl = document.getElementById(id + 'Bar');
+            const statusEl = document.getElementById(id + 'Status');
+            
+            const barWidth = Math.min(value, 100);
+            barEl.style.width = `${barWidth}%`;
+            
+            const met = higherIsBetter ? value >= target : value <= target;
+            barEl.className = `slo-bar-fill ${met ? 'good' : 'bad'}`;
+            statusEl.textContent = met ? 'SLO Met' : 'SLO Breached';
+            statusEl.className = `slo-status ${met ? 'met' : 'breached'}`;
+        }
+
+        // Update container status grid
+        function updateContainerGrid(containers) {
+            const grid = document.getElementById('containerGrid');
+            grid.innerHTML = containers.map(c => `
+                <div class="container-card ${c.running ? 'running' : 'stopped'}">
+                    <div class="container-status-dot"></div>
+                    <div class="container-info">
+                        <span class="container-name">${c.name}</span>
+                        <span class="container-uptime">${c.running ? formatUptime(c.uptime) : 'Offline'}</span>
+                    </div>
+                    <div class="container-metrics">
+                        <span>CPU: ${c.cpuPercent.toFixed(1)}%</span>
+                        <span>RAM: ${c.memMB.toFixed(1)} MB</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update charts
+        function updateCharts(containers) {
+            const now = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            timeLabels.push(now);
+            if (timeLabels.length > MAX_HISTORY) timeLabels.shift();
+
+            // Update CPU history
+            containers.forEach(c => {
+                if (!cpuHistory[c.name]) cpuHistory[c.name] = [];
+                cpuHistory[c.name].push(c.cpuPercent);
+                if (cpuHistory[c.name].length > MAX_HISTORY) cpuHistory[c.name].shift();
+
+                if (!memHistory[c.name]) memHistory[c.name] = [];
+                memHistory[c.name].push(c.memMB);
+                if (memHistory[c.name].length > MAX_HISTORY) memHistory[c.name].shift();
+            });
+
+            // CPU Line Chart
+            cpuChart.data.labels = [...timeLabels];
+            cpuChart.data.datasets = containers.map((c, i) => ({
+                label: c.name,
+                data: cpuHistory[c.name] || [],
+                borderColor: COLORS[i % COLORS.length],
+                backgroundColor: 'transparent',
+                tension: 0.3,
+                pointRadius: 0,
+                borderWidth: 2
+            }));
+            cpuChart.update('none');
+
+            // Memory Line Chart
+            memoryChart.data.labels = [...timeLabels];
+            memoryChart.data.datasets = containers.map((c, i) => ({
+                label: c.name,
+                data: memHistory[c.name] || [],
+                borderColor: COLORS[i % COLORS.length],
+                backgroundColor: 'transparent',
+                tension: 0.3,
+                pointRadius: 0,
+                borderWidth: 2
+            }));
+            memoryChart.update('none');
+
+            // Network Bar Chart
+            networkChart.data.labels = containers.map(c => c.name);
+            networkChart.data.datasets = [
+                {
+                    label: 'RX (KB)',
+                    data: containers.map(c => (c.netRx / 1024).toFixed(1)),
+                    backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                    borderColor: '#6366f1',
+                    borderWidth: 1
+                },
+                {
+                    label: 'TX (KB)',
+                    data: containers.map(c => (c.netTx / 1024).toFixed(1)),
+                    backgroundColor: 'rgba(6, 182, 212, 0.7)',
+                    borderColor: '#06b6d4',
+                    borderWidth: 1
+                }
+            ];
+            networkChart.update('none');
+
+            // Memory Pie Chart
+            memoryPieChart.data.labels = containers.map(c => c.name);
+            memoryPieChart.data.datasets = [{
+                data: containers.map(c => c.memMB.toFixed(1)),
+                backgroundColor: COLORS.map(c => c + 'cc'),
+                borderColor: COLORS,
+                borderWidth: 2
+            }];
+            memoryPieChart.update('none');
+        }
+
+        // Update service details table
+        function updateTable(containers) {
+            const tbody = document.getElementById('serviceTableBody');
+            tbody.innerHTML = containers.map(c => `
+                <tr>
+                    <td><strong>${c.name}</strong></td>
+                    <td><span class="table-status ${c.running ? 'running' : 'stopped'}">${c.running ? 'Running' : 'Stopped'}</span></td>
+                    <td>${c.cpuPercent.toFixed(2)}%</td>
+                    <td>${c.memMB.toFixed(1)} MB</td>
+                    <td>${formatBytes(c.netRx)}</td>
+                    <td>${formatBytes(c.netTx)}</td>
+                    <td>${formatUptime(c.uptime)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Utility: Format uptime
+        function formatUptime(ms) {
+            if (ms <= 0) return '0s';
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            
+            if (days > 0) return `${days}d ${hours % 24}h`;
+            if (hours > 0) return `${hours}h ${minutes % 60}m`;
+            if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+            return `${seconds}s`;
+        }
+
+        // Utility: Format bytes
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const units = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+            return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
+        }
+
+        // Update last refresh timestamp
+        function updateLastRefresh() {
+            const now = new Date().toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('lastUpdate').textContent = `Last update: ${now}`;
+        }
+
+        // Initialize and start polling
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            fetchMetrics();
+            setInterval(fetchMetrics, REFRESH_INTERVAL);
+        });
+    </script>
 </body>
 </html>

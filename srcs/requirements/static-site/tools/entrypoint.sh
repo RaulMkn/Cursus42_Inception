@@ -10,6 +10,14 @@ server {
     location / {
         try_files $uri $uri/ =404;
     }
+
+    # Reverse proxy to cAdvisor API to avoid CORS issues
+    # The dashboard JS calls /api/... which gets proxied to cadvisor:8181
+    location /api/ {
+        proxy_pass http://cadvisor:8181/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
 }
 EOF
 
