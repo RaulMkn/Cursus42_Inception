@@ -14,7 +14,7 @@ fi
 echo "$FTP_USER:$FTP_PASSWORD" | chpasswd
 usermod -aG www-data "$FTP_USER"
 
-chown -R "$FTP_USER":www-data "$FTP_HOME"
+chown "$FTP_USER":www-data "/home/$FTP_USER"
 find "$FTP_HOME" -type d -exec chmod 775 {} \;
 find "$FTP_HOME" -type f -exec chmod 664 {} \;
 

@@ -5,7 +5,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -L https://github.com/google/cadvisor/releases/download/v0.47.2/cadvisor-v0.47.2-linux-amd64 \
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi && \
+    curl -L https://github.com/google/cadvisor/releases/download/v0.47.2/cadvisor-v0.47.2-linux-${ARCH} \
     -o /usr/local/bin/cadvisor \
     && chmod +x /usr/local/bin/cadvisor
 

@@ -1,6 +1,7 @@
 FROM debian:bookworm
 
-RUN apt-get update && apt-get install -y --no-install-recommends nginx openssl gettext-base && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends nginx openssl gettext-base && rm -rf /var/lib/apt/lists/* && \
+    rm -f /var/www/html/index.nginx-debian.html
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf.template
 
