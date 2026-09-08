@@ -2,6 +2,11 @@
 
 # Inception
 
+![42](https://img.shields.io/badge/42-Inception-000000?style=flat-square)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Debian](https://img.shields.io/badge/Base-Debian%20Bookworm-A81D33?style=flat-square&logo=debian&logoColor=white)
+![NGINX](https://img.shields.io/badge/TLS-NGINX-009639?style=flat-square&logo=nginx&logoColor=white)
+
 ## Description
 
 Inception is a system administration project that uses Docker to virtualize a complete web infrastructure inside a virtual machine. The goal is to build, configure, and orchestrate multiple services using custom Docker images, Docker Compose, and Docker networks — without relying on pre-made images from DockerHub.
@@ -9,6 +14,14 @@ Inception is a system administration project that uses Docker to virtualize a co
 The infrastructure deploys a functional WordPress website backed by MariaDB, served through NGINX with TLS encryption, and enhanced with bonus services including Redis caching, FTP access, a real-time monitoring dashboard, Adminer for database management, and cAdvisor for container metrics collection.
 
 All containers are built from Debian Bookworm, use custom Dockerfiles, and communicate through a dedicated Docker network. Data persistence is handled through Docker named volumes stored on the host filesystem.
+
+## Architecture
+
+The full infrastructure topology — the eight containers, the `inception_network` bridge, the two bind-mounted volumes, and every data path (HTTPS, FastCGI, SQL, cache and persistence) — is available as an interactive diagram:
+
+**[View the interactive architecture diagram](https://RaulMkn.github.io/Cursus42_Inception/docs/inception-architecture.html)**
+
+> Served via GitHub Pages from [`docs/inception-architecture.html`](docs/inception-architecture.html).
 
 ### Design Choices
 
@@ -91,6 +104,15 @@ make re     # Full rebuild from scratch
 | Monitoring Dashboard | http://rmakende.42.fr:8443 |
 | cAdvisor API | http://rmakende.42.fr:8181 |
 | FTP | ftp://rmakende.42.fr:21 |
+
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [`docs/TECHNICAL.md`](docs/TECHNICAL.md) | Extended technical documentation: architecture, data structures (network/volumes), error handling and leak/persistence prevention |
+| [`docs/inception-architecture.html`](docs/inception-architecture.html) | Interactive infrastructure diagram ([live on GitHub Pages](https://RaulMkn.github.io/Cursus42_Inception/docs/inception-architecture.html)) |
+| [`USER_DOC.md`](USER_DOC.md) | End-user guide: accessing services, starting/stopping, managing credentials |
+| [`DEV_DOC.md`](DEV_DOC.md) | Developer guide: environment setup, build/launch, container and volume management, debugging |
 
 ## Resources
 

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Inception — Docker Infrastructure Topology",
+    "output": "inception-architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [1240, 560],
+    "views": [
+      { "id": "core-path", "label": "Core request path", "focus": ["clients", "nginx", "wordpress", "db"], "note": "HTTPS from the client hits NGINX, which proxies PHP to WordPress backed by MariaDB." },
+      { "id": "cache-layer", "label": "Cache layer", "focus": ["wordpress", "redis"], "note": "WordPress uses Redis as an object cache to reduce database load." },
+      { "id": "bonus-services", "label": "Bonus services", "focus": ["ftp", "adminer", "static", "cadvisor"], "note": "FTP, Adminer, the monitoring dashboard and cAdvisor extend the base stack." },
+      { "id": "persistence", "label": "Persistence", "focus": ["wordpress", "db", "vol_wp", "vol_db"], "note": "Named volumes bind container data to host directories under /home/rmakende/data." }
+    ]
+  },
+  "components": [
+    { "id": "clients", "type": "external", "label": "Clients", "sublabel": "Browser / FTP client", "pos": [80, 240], "size": [160, 60] },
+    { "id": "nginx", "type": "security", "label": "NGINX", "sublabel": "TLS 1.2/1.3 :443", "tag": "reverse proxy", "pos": [360, 240], "size": [180, 60] },
+    { "id": "wordpress", "type": "backend", "label": "WordPress", "sublabel": "PHP-FPM 8.2 :9000", "pos": [660, 240], "size": [180, 60] },
+    { "id": "db", "type": "database", "label": "MariaDB", "sublabel": "mysqld :3306", "pos": [980, 240], "size": [180, 60] },
+    { "id": "redis", "type": "database", "label": "Redis", "sublabel": "object cache :6379", "pos": [660, 110], "size": [180, 56] },
+    { "id": "cadvisor", "type": "cloud", "label": "cAdvisor", "sublabel": "metrics :8181", "pos": [360, 110], "size": [180, 56] },
+    { "id": "static", "type": "frontend", "label": "Static Site", "sublabel": "dashboard :8443", "pos": [80, 110], "size": [190, 56] },
+    { "id": "ftp", "type": "backend", "label": "FTP (vsftpd)", "sublabel": ":21 + 30000-30009", "pos": [360, 380], "size": [180, 56] },
+    { "id": "adminer", "type": "frontend", "label": "Adminer", "sublabel": "DB web UI :8080", "pos": [660, 380], "size": [180, 56] },
+    { "id": "vol_wp", "type": "cloud", "label": "wordpress volume", "sublabel": "/home/rmakende/data/wordpress", "tag": "bind mount", "pos": [360, 490], "size": [240, 58] },
+    { "id": "vol_db", "type": "cloud", "label": "mariadb volume", "sublabel": "/home/rmakende/data/mariadb", "tag": "bind mount", "pos": [930, 490], "size": [240, 58] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Docker bridge network: inception_network", "wraps": ["nginx", "wordpress", "db", "redis", "ftp", "adminer", "static", "cadvisor"] },
+    { "kind": "security-group", "label": "TLS edge (published :443)", "wraps": ["nginx"] }
+  ],
+  "connections": [
+    { "id": "client-https", "from": "clients", "to": "nginx", "label": "HTTPS :443", "variant": "emphasis" },
+    { "id": "nginx-fpm", "from": "nginx", "to": "wordpress", "label": "FastCGI :9000" },
+    { "id": "wp-sql", "from": "wordpress", "to": "db", "label": "SQL :3306" },
+    { "id": "wp-cache", "from": "wordpress", "to": "redis", "label": "cache", "fromSide": "top", "toSide": "bottom", "labelDy": -34 },
+    { "id": "cadvisor-static", "from": "cadvisor", "to": "static", "label": "metrics API", "variant": "dashed", "fromSide": "left", "toSide": "right" },
+    { "id": "client-ftp", "from": "clients", "to": "ftp", "label": "FTP :21", "variant": "dashed", "fromSide": "bottom", "toSide": "left" },
+    { "id": "ftp-share", "from": "ftp", "to": "wordpress", "label": "shared html", "variant": "dashed", "fromSide": "right", "toSide": "bottom" },
+    { "id": "adminer-db", "from": "adminer", "to": "db", "label": "manage DB", "variant": "dashed", "fromSide": "right", "toSide": "left", "labelAt": [900, 340] },
+    { "id": "wp-vol", "from": "wordpress", "to": "vol_wp", "label": "persist files", "variant": "dashed", "fromSide": "left", "toSide": "top", "labelAt": [460, 330] },
+    { "id": "db-vol", "from": "db", "to": "vol_db", "label": "persist data", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 55 }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Edge", "items": ["NGINX is the only TLS entry point on :443", "Serves static content, proxies PHP over FastCGI"] },
+    { "dot": "emerald", "title": "Application", "items": ["WordPress PHP-FPM 8.2 on :9000", "MariaDB backend + Redis object cache"] },
+    { "dot": "violet", "title": "Bonus services", "items": ["FTP file access, Adminer DB console", "Monitoring dashboard fed by cAdvisor metrics"] },
+    { "dot": "amber", "title": "Persistence", "items": ["Named volumes bind-mounted to the host", "Survives make down; destroyed by make fclean"] }
+  ]
+}
