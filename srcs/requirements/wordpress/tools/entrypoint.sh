@@ -49,7 +49,7 @@ else
     echo "WordPress instalado correctamente."
 fi
 
-wp config set WP_REDIS_HOST "$REDIS_HOST" --type=constant --raw --allow-root --path="$WP_PATH"
+wp config set WP_REDIS_HOST "$REDIS_HOST" --type=constant --allow-root --path="$WP_PATH"
 wp config set WP_REDIS_PORT "$REDIS_PORT" --type=constant --raw --allow-root --path="$WP_PATH"
 wp config set WP_CACHE true --type=constant --raw --allow-root --path="$WP_PATH"
 

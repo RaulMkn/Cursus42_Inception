@@ -7,14 +7,15 @@ services:
       - wordpress
     ports:
       - "443:443"
+    networks:
+      - inception_network
     volumes:
       - wordpress:/var/www/html
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
       WP_ADMIN: ${WP_ADMIN}
     restart: unless-stopped
-    networks:
-      - inception_network
+  
 
   redis:
     build:
@@ -103,7 +104,7 @@ services:
       context: ./requirements/static-site
     container_name: static-site
     ports:
-      - "8443:8443"
+      - "8090:8443"
     restart: always
     networks:
       - inception_network
