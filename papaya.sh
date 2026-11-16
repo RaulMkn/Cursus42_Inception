@@ -140,14 +140,14 @@ done
 sub_header "1.3 Protocolos Criptográficos TLSv1.2 y TLSv1.3"
 
 # Probar TLSv1.2
-if openssl s_client -connect "${DOMAIN}:443" -tls1_2 </dev/null 2>/dev/null | grep -q "Protocol  : TLSv1.2"; then
+if openssl s_client -connect "${DOMAIN}:443" -tls1_2 </dev/null 2>/dev/null | grep -q "TLSv1.2"; then
     pass "NGINX acepta conexiones seguras TLSv1.2."
 else
     fail "NGINX rechazó TLSv1.2."
 fi
 
 # Probar TLSv1.3
-if openssl s_client -connect "${DOMAIN}:443" -tls1_3 </dev/null 2>/dev/null | grep -q "Protocol  : TLSv1.3"; then
+if openssl s_client -connect "${DOMAIN}:443" -tls1_3 </dev/null 2>/dev/null | grep -q "TLSv1.3"; then
     pass "NGINX acepta conexiones seguras TLSv1.3."
 else
     fail "NGINX rechazó TLSv1.3."

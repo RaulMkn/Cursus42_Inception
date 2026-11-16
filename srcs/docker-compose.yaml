@@ -100,8 +100,8 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
-    expose:
-      - "8181"
+    ports:
+      - "8181:8181"
     networks:
       - inception_network
 
