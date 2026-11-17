@@ -41,9 +41,9 @@ propia basada en **Debian Bookworm**, comunicándose a través de una única red
 |----------|-----|--------|------------|
 | Redis | Caché de objetos de WordPress | 6379 | Solo red interna |
 | FTP (vsftpd) | Acceso a archivos de WordPress | 21 + 30000-30009 | Publicado |
-| Adminer | Consola web de base de datos | 8080 | Publicado |
-| Static Site | Dashboard de monitorización | 8443 | Publicado |
-| cAdvisor | Métricas de contenedores | 8181 | Publicado |
+| Adminer | Consola web de base de datos | 8080 | Interno (vía NGINX `/adminer/`) |
+| Static Site | Dashboard de monitorización | 8443 | Interno (vía NGINX `/static/`) |
+| cAdvisor | Métricas de contenedores | 8181 | Interno (vía NGINX `/cadvisor/`) |
 
 ### 2.3 Flujo de una petición
 
@@ -110,7 +110,6 @@ El volumen `wordpress` es **compartido** por tres servicios:
 Las credenciales viven fuera del control de versiones:
 
 - `srcs/.env` (gitignored): nombres de dominio, base de datos, hosts y puertos.
-- `secrets/` (gitignored): ficheros con contraseñas.
 
 Ningún Dockerfile hardcodea credenciales; se inyectan por `environment:` en el Compose.
 
@@ -167,7 +166,7 @@ fallos transitorios (por ejemplo, si un dependiente aún no está listo tras el 
   recreación de contenedores.
 - La destrucción es **explícita**: solo `make fclean` borra los volúmenes y las rutas del
   host. Ningún flujo normal elimina datos de forma accidental.
-- Las credenciales no se filtran al repositorio: `.env` y `secrets/` están en `.gitignore`.
+- Las credenciales no se filtran al repositorio: `.env` está en `.gitignore`.
   Se referencian por nombre de clave, nunca por valor.
 
 ### 5.2 Fugas de procesos y descriptores

@@ -31,7 +31,7 @@ else
 
     echo "Instalando WordPress..."
     wp core install \
-        --url=$DOMAIN_NAME \
+        --url=https://$DOMAIN_NAME \
         --title="Inception 42" \
         --admin_user=$WP_ADMIN \
         --admin_password=$WP_ADMIN_PASS \

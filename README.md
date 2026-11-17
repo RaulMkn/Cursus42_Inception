@@ -28,7 +28,7 @@ The full infrastructure topology — the eight containers, the `inception_networ
 - **Debian Bookworm** was chosen as the base image for all services for consistency and package availability.
 - **PID 1 best practices**: all entrypoints use `exec` to replace the shell process with the actual service daemon, ensuring proper signal handling.
 - **Wait-for-it pattern**: WordPress entrypoint waits for MariaDB to be ready before proceeding with installation, handling startup ordering beyond `depends_on`.
-- **Environment variables and secrets**: credentials are stored in `.env` (gitignored) and a `secrets/` directory, never hardcoded in Dockerfiles.
+- **Environment variables and secrets**: credentials are stored in `srcs/.env` (gitignored), never hardcoded in Dockerfiles.
 - **Monitoring Dashboard**: the static site bonus is a real-time infrastructure dashboard (HTML/CSS/JS, no PHP) that consumes cAdvisor's REST API to display SLO metrics, container health, CPU/memory graphs, and network I/O. NGINX proxies API requests internally to avoid CORS issues.
 
 ### Virtual Machines vs Docker
@@ -52,7 +52,7 @@ Docker containers are not VMs — they share the host kernel and run as isolated
 | Security | Moderate (exposed in process env) | Higher (tmpfs, not persisted to disk) |
 | Use case | Non-sensitive config (ports, hosts) | Passwords, API keys, tokens |
 
-For this project, sensitive credentials are stored in the `secrets/` directory and the `.env` file is gitignored to prevent accidental exposure.
+For this project, credentials are kept in the `.env` file, which is gitignored to prevent accidental exposure. Docker secrets were not adopted because the images read configuration from environment variables.
 
 ### Docker Network vs Host Network
 
@@ -100,9 +100,9 @@ make re     # Full rebuild from scratch
 | Service | URL / Access |
 |---------|-------------|
 | WordPress | https://rmakende.42.fr |
-| Adminer | http://rmakende.42.fr:8080 |
-| Monitoring Dashboard | http://rmakende.42.fr:8443 |
-| cAdvisor API | http://rmakende.42.fr:8181 |
+| Adminer | https://rmakende.42.fr/adminer/ |
+| Monitoring Dashboard | https://rmakende.42.fr/static/ |
+| cAdvisor API | https://rmakende.42.fr/cadvisor/ |
 | FTP | ftp://rmakende.42.fr:21 |
 
 ## Documentation

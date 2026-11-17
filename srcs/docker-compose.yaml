@@ -83,8 +83,8 @@ services:
     build:
       context: ./requirements/static-site
     container_name: static-site
-    ports:
-      - "8090:8443"
+    expose:
+      - "8443"
     restart: always
     networks:
       - inception_network
@@ -100,8 +100,8 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
-    ports:
-      - "8181:8181"
+    expose:
+      - "8181"
     networks:
       - inception_network
 

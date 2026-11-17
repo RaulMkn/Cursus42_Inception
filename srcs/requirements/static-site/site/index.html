@@ -148,7 +148,7 @@
         // Configuration
         // API calls go through our own NGINX proxy (/api/) to avoid CORS issues
         // NGINX proxies /api/ -> cadvisor:8181/api/ internally via Docker network
-        const CADVISOR_BASE = `${window.location.origin}`;
+        const CADVISOR_BASE = new URL('.', window.location.href).href.replace(/\/$/, '');
         const REFRESH_INTERVAL = 5000;
         const EXPECTED_CONTAINERS = 8;
         const SLO_AVAILABILITY_TARGET = 99.9;

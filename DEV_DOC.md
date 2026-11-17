@@ -40,19 +40,12 @@
    - `FTP_USER`, `FTP_PASSWORD`, `FTP_PASV_ADDRESS`
    - `ADMINER_DEFAULT_SERVER`
 
-4. Create the secrets files:
-   ```bash
-   mkdir -p secrets
-   echo "your_db_password" > secrets/db_password.txt
-   echo "your_root_password" > secrets/db_root_password.txt
-   ```
-
-5. Configure DNS resolution:
+4. Configure DNS resolution:
    ```bash
    sudo echo "127.0.0.1  rmakende.42.fr" >> /etc/hosts
    ```
 
-6. Build and launch:
+5. Build and launch:
    ```bash
    make
    ```
@@ -176,10 +169,6 @@ inception/
 ├── README.md                         # Project overview and comparisons
 ├── USER_DOC.md                       # End-user documentation
 ├── DEV_DOC.md                        # This file
-├── secrets/                          # Credentials (gitignored)
-│   ├── credentials.txt
-│   ├── db_password.txt
-│   └── db_root_password.txt
 └── srcs/
     ├── .env                          # Environment variables (gitignored)
     ├── docker-compose.yaml           # Service orchestration

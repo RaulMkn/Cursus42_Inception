@@ -1,5 +1,4 @@
 *.pdf
 *.env
-secrets/
 TODO.md
 *guia*
